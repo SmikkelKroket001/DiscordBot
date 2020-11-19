@@ -3,6 +3,7 @@ const botConfig = require("./botconfig.json");
 
 const client = new discord.Client();
 client.login("Nzc4NjQyNzg5MzQ4Mjc4MzAy.X7U9mw.cbwHRaaKzewFdkmEyv1Gz_-a_v8");
+client.login(process.env.token);
 
 client.on("ready", async () => {
 
