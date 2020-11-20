@@ -1,7 +1,36 @@
-const discord = require("discord.js");
+const discord = require("disco;rd.js")
 const botConfig = require("./botconfig.json");
 
-const client = new discord.Client();
+const fs = require("fs");
+
+const bot = new discord.Client();
+bot.commands = new discord.Collection(); 
+
+fs.readdir("./commands" , (err, files) => {
+
+    if(err) console.log(err);
+
+    var jsFiles = files.filter(f => f.split(".").pop() === "js");
+
+    if (jsFiles.lenght <=0) {
+        console.log("Ik kon geen files vinden.");
+        return;
+    }
+
+    jsFiles.forEach((f, i) => {
+
+        var fileGet = require(`./commands/${f}`);
+        console.log(`De file ${f} is geladen!`);
+
+        bot.commands.set(fileGet.help.name, fileGet);
+
+    })
+
+
+
+}); 
+
+
 client.login(process.env.token);
 
 client.on("ready", async () => {
@@ -23,50 +52,15 @@ client.on("message", async message =>{
 
        var command = messageArray[0];
 
-       if(command === `${prefix}hallo`){
-           return message.channel.send("Hallo!")
-       }
-
-       if(command === `${prefix}doei`){
-           return message.channel.send("Dag hoor!");
+       var arguments = messageArray.slice(1);
        
-           
-           
-       }
+       
+       var commands = bot.commands.get(command.slice(prefix.length));
+       if(commands) commands.run(bot,message, arguments);
 
-       if (command === `${prefix}info`) {
+       
 
-        var botEmbed = new discord.MessageEmbed()
-             .setTitle("Informatie")
-             .setDescription("Hier kan je wat informatie vinden!")
-             .setColor("#0099ff")
-             .addField("Bot naam", client.user.username)
-             .addFields(
-                 {name: "Datum dat de bot is gemaakt", value: "18-11-2020"},
-                 {name: "Maker van de bot", value: "SmikkelKroket001"}  
-                 )
-                 .setThumbnail("https://imgur.com/a/3iGTNyz")
-                 .setFooter("Made by SmikkelKroket001");
-             
-
-          return message.channel.send(botEmbed);
-
-             }
-          if (command === `${prefix}serverinfo`) {
-
-            var botEmbed = new discord.MessageEmbed()
-                 .setTitle("Server Informatie")
-                 .setDescription("Hier kan je wat server informatie vinden!")
-                 .setColor("#0099ff")
-                 .addFields(
-                     {name:"Je bent gejoined op:", value: message.member.joinedAt},
-                     {name:"Totaal members", value:message.guild.memberCount}
-                     )
-                     .setFooter("Made by SmikkelKroket001")
-                 
-    
-              return message.channel.send(botEmbed);
-       }
+       
        
        if (command === `${prefix}kick`) {
 
