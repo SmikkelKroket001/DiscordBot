@@ -31,16 +31,16 @@ fs.readdir("./commands" , (err, files) => {
 }); 
 
 
-client.login(process.env.token);
+bot.login(process.env.token);
 
-client.on("ready", async () => {
+bot.on("ready", async () => {
 
-    console.log(`${client.user.username} is online.`);
-    client.user.setActivity("de commands!", {type: "LISTENING"})
+    console.log(`${bot.user.username} is online.`);
+    bot.user.setActivity("de commands!", {type: "LISTENING"})
 
 });
 
-client.on("message", async message =>{
+bot.on("message", async message =>{
 
        if(message.author.bot) return;
 
@@ -136,7 +136,7 @@ async function promptMessage(message, author, time, reactions){
     return message.awaitReactions(filter, {max:1, time: time}).then(collected => collected.first() && collected.first().emoji.name);
 }
 
-client.on("guildMemberAdd", member =>{
+bot.on("guildMemberAdd", member =>{
 
     var role = member.guild.roles.cache.get("776066987389747241");
 
