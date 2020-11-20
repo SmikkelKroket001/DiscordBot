@@ -1,4 +1,4 @@
-const discord = require("disco;rd.js");
+const discord = require("discord.js");
 
 module.exports.run = async(bot, message, args) => {
 
